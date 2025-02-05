@@ -1,60 +1,94 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to bottom, #4f4f4f, #2f2f2f);
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    margin: 0;
 }
 
-.chatbox {
-    width: 350px;
-    background-color: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
+.chat-container {
+    background: #1c1c1c;
+    border-radius: 15px;
     padding: 20px;
+    width: 400px;
+    height: 500px;
     display: flex;
     flex-direction: column;
 }
 
-.chatlogs {
-    height: 400px;
+.chat-box {
     overflow-y: auto;
-    margin-bottom: 10px;
+    flex: 1;
+    margin-bottom: 20px;
     padding-right: 10px;
 }
 
-.chatlogs div {
-    margin: 10px 0;
-}
-
-.chat-input {
+.input-container {
     display: flex;
+    align-items: center;
 }
 
-.chat-input input {
+.input-container input {
     flex: 1;
     padding: 10px;
-    border: 1px solid #ddd;
     border-radius: 5px;
+    border: 1px solid #333;
+    color: white;
+    background: #333;
     outline: none;
 }
 
-.chat-input input:focus {
-    border-color: #4CAF50;
+.input-container input:focus {
+    border-color: #00d8ff;
 }
 
-.chat-input button {
-    padding: 10px;
-    border: none;
-    background-color: #4CAF50;
+.input-container button {
+    background-color: #00d8ff;
     color: white;
+    padding: 10px 15px;
+    margin-left: 10px;
+    border: none;
     border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-.chat-input button:hover {
-    background-color: #45a049;
+.input-container button:hover {
+    background-color: #008c99;
 }
 
+.message {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #333;
+    color: white;
+    max-width: 80%;
+}
+
+.user-message {
+    background-color: #00d8ff;
+    margin-left: auto;
+}
+
+.bot-message {
+    background-color: #444;
+}
+
+.typing-indicator {
+    font-size: 14px;
+    color: #aaa;
+    font-style: italic;
+    display: none;
+}
+
+.typing-indicator.show {
+    display: block;
+}

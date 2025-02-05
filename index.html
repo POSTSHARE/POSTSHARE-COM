@@ -3,70 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PostShare - Social Feed</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f0f2f5;
-            margin: 0;
-        }
-        .container {
-            max-width: 600px;
-            margin: 20px auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        .post {
-            background: #fff;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            box-shadow: 0 0 5px rgba(0,0,0,0.1);
-        }
-        button {
-            background: #1877f2;
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        input, textarea {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-    </style>
+    <title>Movie Streaming Website</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h2>PostShare</h2>
-        <input type="text" id="postText" placeholder="What's on your mind?">
-        <button onclick="addPost()">Post</button>
-        <div id="feed"></div>
+
+    <header>
+        <h1>Welcome to Our Movie Streaming</h1>
+        <p>Your favorite movies, just a click away!</p>
+    </header>
+
+    <div id="movies" class="movie-list">
+        <!-- Movie cards will be injected here by JavaScript -->
     </div>
 
-    <script>
-        function addPost() {
-            let postText = document.getElementById("postText").value;
-            if (postText === "") return;
-            let post = document.createElement("div");
-            post.className = "post";
-            post.innerHTML = `<p>${postText}</p><button onclick="likePost(this)">Like (0)</button>`;
-            document.getElementById("feed").prepend(post);
-            document.getElementById("postText").value = "";
-        }
+    <footer>
+        <p>&copy; 2025 Movie Streaming. All Rights Reserved.</p>
+    </footer>
 
-        function likePost(button) {
-            let count = parseInt(button.innerText.match(/\d+/)[0]) + 1;
-            button.innerText = `Like (${count})`;
-        }
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>
+
 

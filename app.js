@@ -1,16 +1,13 @@
 const chatBox = document.getElementById('chat-box');
 const userInput = document.getElementById('user-input');
-const typingIndicator = document.createElement('div');
-typingIndicator.classList.add('typing-indicator');
-typingIndicator.innerText = "AI is typing...";
-chatBox.appendChild(typingIndicator);
+const thinkingIndicator = document.getElementById('thinking-indicator');
 
-const botResponses = {
-    "hello": "Hey there! How can I help you today?",
-    "hi": "Hello! How can I assist you?",
-    "how are you?": "I'm an AI, so I don't feel emotions, but I'm ready to assist!",
-    "what is your name?": "I am your friendly AI chatbot.",
-    "bye": "Goodbye! Come back soon!"
+const knowledgeBase = {
+    "hello": "Hey there! I'm Felix, your AI assistant. How can I help?",
+    "hi": "Hello! What can I do for you today?",
+    "how are you?": "I'm a machine, but thanks for asking! Ready to assist you.",
+    "what is your name?": "I'm Felix! Your friendly AI companion.",
+    "bye": "Goodbye! Feel free to reach out whenever you need help!"
 };
 
 function sendMessage() {
@@ -18,12 +15,13 @@ function sendMessage() {
     if (message) {
         addMessage(message, 'user');
         userInput.value = '';
-        showTypingIndicator();
+        showThinkingIndicator();
+        
         setTimeout(() => {
             const botMessage = getBotResponse(message);
             addMessage(botMessage, 'bot');
-            hideTypingIndicator();
-        }, 1500);
+            hideThinkingIndicator();
+        }, 1500); // Simulate "thinking" time
     }
 }
 
@@ -35,15 +33,21 @@ function addMessage(message, sender) {
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-function showTypingIndicator() {
-    typingIndicator.classList.add('show');
+function showThinkingIndicator() {
+    thinkingIndicator.style.display = 'block';
 }
 
-function hideTypingIndicator() {
-    typingIndicator.classList.remove('show');
+function hideThinkingIndicator() {
+    thinkingIndicator.style.display = 'none';
 }
 
 function getBotResponse(message) {
+    // Check if the message is in the knowledge base, if not, give a generic response.
     const lowerMessage = message.toLowerCase();
-    return botResponses[lowerMessage] || "Sorry, I don't understand that.";
+    if (knowledgeBase[lowerMessage]) {
+        return knowledgeBase[lowerMessage];
+    } else {
+        // Simulating a search-like behavior (not actual search).
+        return "Hmm, let me think... I don't know that. Can you ask something else?";
+    }
 }

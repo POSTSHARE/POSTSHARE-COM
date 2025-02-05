@@ -51,3 +51,33 @@ function getBotResponse(message) {
         return "Hmm, let me think... I don't know that. Can you ask something else?";
     }
 }
+const knowledgeBase = {
+    "hello": "Hey there! I'm Felix, your AI assistant. How can I help?",
+    "hi": "Hello! What can I do for you today?",
+    "how are you?": "I'm a machine, but thanks for asking! Ready to assist you.",
+    "what is your name?": "I'm Felix! Your friendly AI companion.",
+    "bye": "Goodbye! Feel free to reach out whenever you need help!",
+    "what is the capital of france?": "The capital of France is Paris.",
+    "who is the president of the USA?": "As of now, the president is Joe Biden.",
+    "tell me a joke": "Why don't scientists trust atoms? Because they make up everything!",
+    "what is AI?": "AI, or Artificial Intelligence, is the simulation of human intelligence in machines."
+};
+function getBotResponse(message) {
+    // Convert user message to lowercase to make it case-insensitive
+    const lowerMessage = message.toLowerCase();
+    
+    // Look for exact matches in the knowledge base
+    if (knowledgeBase[lowerMessage]) {
+        return knowledgeBase[lowerMessage];
+    }
+    
+    // If no exact match, check for keywords
+    for (const key in knowledgeBase) {
+        if (lowerMessage.includes(key)) {
+            return knowledgeBase[key];
+        }
+    }
+
+    // If no match at all, give a generic response
+    return "Hmm, let me think... I don't know that. Can you ask something else?";
+}

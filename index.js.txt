@@ -1,241 +1,72 @@
-// index.js
-const express = require('express');
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const path = require('path');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PostShare - Social Feed</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f2f5;
+            margin: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .post {
+            background: #fff;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #1877f2;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>PostShare</h2>
+        <input type="text" id="postText" placeholder="What's on your mind?">
+        <button onclick="addPost()">Post</button>
+        <div id="feed"></div>
+    </div>
 
-const app = express();
-const JWT_SECRET = "your_jwt_secret_key"; // In production, use environment variables
-
-// Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Connect to MongoDB (make sure MongoDB is running locally or update the URI)
-mongoose.connect('mongodb://localhost:27017/postshare', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-  .then(() => console.log("MongoDB connected"))
-  .catch(err => console.log(err));
-
-// Mongoose Schemas and Models
-const UserSchema = new mongoose.Schema({
-  username: { type: String, required: true, unique: true },
-  email:    { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-});
-const User = mongoose.model('User', UserSchema);
-
-const PostSchema = new mongoose.Schema({
-  user:    { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  content: { type: String, required: true },
-  date: { type: Date, default: Date.now }
-});
-const Post = mongoose.model('Post', PostSchema);
-
-// Helper: Authenticate Middleware
-function auth(req, res, next) {
-  const token = req.headers['x-auth-token'] || req.query.token;
-  if (!token) return res.status(401).send("No token provided.");
-  
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET);
-    req.user = decoded;
-    next();
-  } catch (err) {
-    return res.status(400).send("Invalid token.");
-  }
-}
-
-// API Endpoints
-
-// Register Endpoint
-app.post('/api/register', async (req, res) => {
-  const { username, email, password } = req.body;
-  try {
-    let user = await User.findOne({ email });
-    if (user) return res.status(400).json({ msg: "User already exists" });
-    
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    user = new User({ username, email, password: hashedPassword });
-    await user.save();
-    
-    const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: 3600 });
-    res.json({ token, user: { id: user._id, username, email } });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Server error");
-  }
-});
-
-// Login Endpoint
-app.post('/api/login', async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    let user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ msg: "User does not exist" });
-    
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ msg: "Invalid credentials" });
-    
-    const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: 3600 });
-    res.json({ token, user: { id: user._id, username: user.username, email } });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Server error");
-  }
-});
-
-// Create Post Endpoint
-app.post('/api/posts', auth, async (req, res) => {
-  const { content } = req.body;
-  try {
-    const newPost = new Post({ user: req.user.id, content });
-    const post = await newPost.save();
-    res.json(post);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Server error");
-  }
-});
-
-// Get Posts Endpoint
-app.get('/api/posts', async (req, res) => {
-  try {
-    const posts = await Post.find().populate('user', ['username']).sort({ date: -1 });
-    res.json(posts);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Server error");
-  }
-});
-
-// Serve a Simple HTML Page as Frontend
-app.get('/', (req, res) => {
-  res.send(`
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <title>POSTSHARE</title>
-      <style>
-        body { font-family: Arial, sans-serif; padding: 20px; }
-        form { margin-bottom: 20px; }
-        input, textarea { display: block; margin: 10px 0; width: 300px; }
-      </style>
-    </head>
-    <body>
-      <h1>Welcome to POSTSHARE</h1>
-      <div id="auth">
-        <h2>Register</h2>
-        <form id="registerForm">
-          <input type="text" id="regUsername" placeholder="Username" required />
-          <input type="email" id="regEmail" placeholder="Email" required />
-          <input type="password" id="regPassword" placeholder="Password" required />
-          <button type="submit">Register</button>
-        </form>
-        <h2>Login</h2>
-        <form id="loginForm">
-          <input type="email" id="loginEmail" placeholder="Email" required />
-          <input type="password" id="loginPassword" placeholder="Password" required />
-          <button type="submit">Login</button>
-        </form>
-      </div>
-      <div id="feed" style="display:none;">
-        <h2>Post Something</h2>
-        <form id="postForm">
-          <textarea id="postContent" placeholder="What's on your mind?" required></textarea>
-          <button type="submit">Post</button>
-        </form>
-        <h2>Posts</h2>
-        <div id="posts"></div>
-      </div>
-      <script>
-        let token = null;
-        const authDiv = document.getElementById('auth');
-        const feedDiv = document.getElementById('feed');
-        const postsDiv = document.getElementById('posts');
-
-        // Helper to make API calls
-        async function api(endpoint, method, data) {
-          const res = await fetch(endpoint, {
-            method,
-            headers: {
-              'Content-Type': 'application/json',
-              ...(token && { 'x-auth-token': token })
-            },
-            body: data ? JSON.stringify(data) : null
-          });
-          return res.json();
+    <script>
+        function addPost() {
+            let postText = document.getElementById("postText").value;
+            if (postText === "") return;
+            let post = document.createElement("div");
+            post.className = "post";
+            post.innerHTML = `<p>${postText}</p><button onclick="likePost(this)">Like (0)</button>`;
+            document.getElementById("feed").prepend(post);
+            document.getElementById("postText").value = "";
         }
 
-        // Register
-        document.getElementById('registerForm').addEventListener('submit', async e => {
-          e.preventDefault();
-          const username = document.getElementById('regUsername').value;
-          const email = document.getElementById('regEmail').value;
-          const password = document.getElementById('regPassword').value;
-          const res = await api('/api/register', 'POST', { username, email, password });
-          if(res.token) {
-            token = res.token;
-            authDiv.style.display = 'none';
-            feedDiv.style.display = 'block';
-            loadPosts();
-          } else {
-            alert(res.msg || "Registration failed");
-          }
-        });
-
-        // Login
-        document.getElementById('loginForm').addEventListener('submit', async e => {
-          e.preventDefault();
-          const email = document.getElementById('loginEmail').value;
-          const password = document.getElementById('loginPassword').value;
-          const res = await api('/api/login', 'POST', { email, password });
-          if(res.token) {
-            token = res.token;
-            authDiv.style.display = 'none';
-            feedDiv.style.display = 'block';
-            loadPosts();
-          } else {
-            alert(res.msg || "Login failed");
-          }
-        });
-
-        // Create Post
-        document.getElementById('postForm').addEventListener('submit', async e => {
-          e.preventDefault();
-          const content = document.getElementById('postContent').value;
-          const res = await api('/api/posts', 'POST', { content });
-          if(res._id) {
-            document.getElementById('postContent').value = '';
-            loadPosts();
-          } else {
-            alert("Posting failed");
-          }
-        });
-
-        // Load Posts
-        async function loadPosts() {
-          const posts = await api('/api/posts', 'GET');
-          postsDiv.innerHTML = '';
-          posts.forEach(post => {
-            const div = document.createElement('div');
-            div.style.border = '1px solid #ccc';
-            div.style.padding = '10px';
-            div.style.margin = '10px 0';
-            div.innerHTML = '<strong>' + (post.user.username || "Anonymous") + '</strong><br/>' + post.content;
-            postsDiv.appendChild(div);
-          });
+        function likePost(button) {
+            let count = parseInt(button.innerText.match(/\d+/)[0]) + 1;
+            button.innerText = `Like (${count})`;
         }
-      </script>
-    </body>
-    </html>
-  `);
-});
+    </script>
+</body>
+</html>
 
-// Start Server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

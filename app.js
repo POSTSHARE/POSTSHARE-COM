@@ -1,44 +1,54 @@
+// DOM Elements
+const sidebar = document.getElementById('sidebar');
+const sidebarToggle = document.getElementById('sidebar-toggle');
+const closeSidebar = document.getElementById('close-sidebar');
 const chatBox = document.getElementById('chat-box');
 const userInput = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
 const conversationList = document.getElementById('conversation-list');
 
-// Function to add a message to the chat box
+// Toggle Sidebar
+sidebarToggle.addEventListener('click', () => {
+  sidebar.classList.add('active');
+});
+
+closeSidebar.addEventListener('click', () => {
+  sidebar.classList.remove('active');
+});
+
+// Add Message Function
 function addMessage(message, isUser) {
-  const messageElement = document.createElement('div');
-  messageElement.classList.add('message');
-  messageElement.classList.add(isUser ? 'user-message' : 'bot-message');
-
-  const messageText = document.createElement('p');
-  messageText.textContent = message;
-  messageElement.appendChild(messageText);
-
-  chatBox.appendChild(messageElement);
-  chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to the latest message
+  const messageDiv = document.createElement('div');
+  messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+  messageDiv.innerHTML = `<p>${message}</p>`;
+  chatBox.appendChild(messageDiv);
+  chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-// Function to handle user input
-function handleUserInput() {
-  const userMessage = userInput.value.trim();
-  if (userMessage) {
-    addMessage(userMessage, true);
-    userInput.value = ''; // Clear input field
+// Handle User Input
+function handleInput() {
+  const message = userInput.value.trim();
+  if (!message) return;
 
-    // Add user message to old conversations
-    const conversationItem = document.createElement('li');
-    conversationItem.textContent = userMessage;
-    conversationList.appendChild(conversationItem);
+  // Add to conversation history
+  const listItem = document.createElement('li');
+  listItem.textContent = message;
+  conversationList.appendChild(listItem);
 
-    // Simulate bot response
-    setTimeout(() => {
-      const botMessage = "Sorry, I can’t generate messages right now. I’m still under development. Stay with me for future updates!";
-      addMessage(botMessage, false);
-    }, 500);
-  }
+  // Add user message
+  addMessage(message, true);
+
+  // System response
+  setTimeout(() => {
+    addMessage("System: Neural processors are still being calibrated. Please wait for future updates.", false);
+  }, 500);
+
+  // Clear input
+  userInput.value = '';
 }
 
-// Event listeners
-sendBtn.addEventListener('click', handleUserInput);
+// Event Listeners
+sendBtn.addEventListener('click', handleInput);
 userInput.addEventListener('keypress', (e) => {
-  if (e.key === 'Enter') handleUserInput();
+  if (e.key === 'Enter') handleInput();
 });

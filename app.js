@@ -1,47 +1,23 @@
-const chatBox = document.getElementById('chat-box');
-const userInput = document.getElementById('user-input');
-const sendBtn = document.getElementById('send-btn');
+// Sample script for interacting with the chatbot
+document.getElementById('send-button').addEventListener('click', function() {
+    const userInput = document.getElementById('user-input').value.trim();
+    if (userInput) {
+        // Display user message
+        const userMessageDiv = document.createElement('div');
+        userMessageDiv.classList.add('message', 'user-message');
+        userMessageDiv.textContent = userInput;
+        document.getElementById('chat-box').appendChild(userMessageDiv);
+        
+        // Clear input field
+        document.getElementById('user-input').value = '';
 
-// Function to add a message to the chat box
-function addMessage(message, isUser) {
-  const messageElement = document.createElement('div');
-  messageElement.classList.add('message');
-  messageElement.classList.add(isUser ? 'user-message' : 'bot-message');
-  messageElement.textContent = message;
-  chatBox.appendChild(messageElement);
-  chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to the latest message
-}
-
-// Function to handle user input
-function handleUserInput() {
-  const userMessage = userInput.value.trim();
-  if (userMessage) {
-    addMessage(userMessage, true);
-    userInput.value = ''; // Clear input field
-
-    // Simulate bot response (you can replace this with an API call)
-    setTimeout(() => {
-      const botMessage = getBotResponse(userMessage);
-      addMessage(botMessage, false);
-    }, 500);
-  }
-}
-
-// Function to generate bot responses
-function getBotResponse(userMessage) {
-  const responses = {
-    "hello": "Hi there! How can I assist you today?",
-    "how are you": "I'm just a bunch of code, but I'm functioning perfectly! How about you?",
-    "what is your name": "I'm NeuraFlow AI, your intelligent assistant.",
-    "default": "I'm sorry, I didn't understand that. Can you rephrase?"
-  };
-
-  const lowerCaseMessage = userMessage.toLowerCase();
-  return responses[lowerCaseMessage] || responses["default"];
-}
-
-// Event listeners
-sendBtn.addEventListener('click', handleUserInput);
-userInput.addEventListener('keypress', (e) => {
-  if (e.key === 'Enter') handleUserInput();
+        // Display bot response (for now, it's a simple echo)
+        const botResponseDiv = document.createElement('div');
+        botResponseDiv.classList.add('message', 'bot-message');
+        botResponseDiv.textContent = `You said: ${userInput}`;
+        document.getElementById('chat-box').appendChild(botResponseDiv);
+        
+        // Scroll to bottom
+        document.getElementById('chat-box').scrollTop = document.getElementById('chat-box').scrollHeight;
+    }
 });

@@ -14,7 +14,7 @@ document.getElementById('send-button').addEventListener('click', function() {
         // Call AI function to get response from the backend
         setTimeout(function() {
             getAIResponse(userInput);
-        }, 500); // Adding a slight delay to simulate processing
+        }, 500); // Adding slight delay for realism
     }
 });
 
@@ -24,7 +24,7 @@ async function getAIResponse(userInput) {
     let botResponse = "Sorry, I couldn't understand that.";
 
     try {
-        // Send the user input to the backend (Node.js server)
+        // Send the user input to the backend (Node.js server or similar)
         const response = await fetch('http://localhost:3000/ask', {
             method: 'POST',
             headers: {
@@ -46,11 +46,11 @@ async function getAIResponse(userInput) {
     botResponseDiv.textContent = botResponse;
     chatBox.appendChild(botResponseDiv);
 
-    // Scroll to bottom to show latest messages
+    // Scroll to the bottom of the chat box
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-// Optional: Add functionality to press Enter key for sending messages
+// Optional: Add functionality to press Enter key to send message
 document.getElementById('user-input').addEventListener('keypress', function(event) {
     if (event.key === 'Enter') {
         document.getElementById('send-button').click();

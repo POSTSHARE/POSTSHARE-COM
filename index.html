@@ -1,25 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NeuraFlow AI</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neura Flow AI</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="chat-container">
-    <header class="chat-header">
-      <h1>NeuraFlow AI</h1>
-      <p>Your Intelligent Assistant</p>
-    </header>
-    <div class="chat-box" id="chat-box">
-      <!-- Chat messages will appear here -->
+    <div class="chat-container">
+        <header>
+            <h1>Neura Flow AI</h1>
+            <p>Ask me anything, and I'll help you out!</p>
+        </header>
+        
+        <div class="chat-box" id="chat-box">
+            <div class="message bot-message">Hi, I'm Neura Flow AI. How can I assist you today?</div>
+        </div>
+        
+        <div class="input-container">
+            <input type="text" id="user-input" placeholder="Ask me a question..." />
+            <button id="send-button">Send</button>
+        </div>
     </div>
-    <div class="chat-input">
-      <input type="text" id="user-input" placeholder="Ask me anything..." />
-      <button id="send-btn">Send</button>
-    </div>
-  </div>
-  <script src="script.js"></script>
+
+    <script src="script.js"></script>
 </body>
 </html>

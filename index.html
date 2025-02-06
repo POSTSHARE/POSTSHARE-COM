@@ -3,38 +3,46 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NeuraFlow AI 2050</title>
+  <title>NeuraFlow AI</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <!-- Sidebar Toggle Button -->
+  <div class="sidebar-toggle" id="sidebar-toggle">
+    <i class="fas fa-bars"></i>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h3>NeuraFlow AI Logs</h3>
+      <i class="fas fa-times" id="close-sidebar"></i>
+    </div>
+    <ul id="conversation-list">
+      <!-- Conversation history will appear here -->
+    </ul>
+  </div>
+
+  <!-- Main Container -->
   <div class="container">
     <!-- Header -->
     <header class="header">
       <h1>NeuraFlow AI</h1>
-      <p>Your Intelligent Assistant from 2050</p>
-      <div class="ceo-tagline">Made by Sahlan Hasan</div>
+      <p class="ceo-tagline">CEO: Sahlan Hasan</p>
     </header>
-
-    <!-- Sidebar for Old Conversations -->
-    <div class="sidebar">
-      <h3>Old Conversations</h3>
-      <ul id="conversation-list">
-        <!-- Old conversations will appear here -->
-      </ul>
-    </div>
 
     <!-- Chat Box -->
     <div class="chat-box" id="chat-box">
-      <!-- Chat messages will appear here -->
       <div class="message bot-message">
-        <p>Welcome to the future! I'm NeuraFlow AI. How can I assist you today?</p>
+        <p>System Initialized. Neural networks loading...</p>
       </div>
     </div>
 
     <!-- Input Area -->
     <div class="input-area">
-      <input type="text" id="user-input" placeholder="Type your message..." />
-      <button id="send-btn">Send</button>
+      <input type="text" id="user-input" placeholder="Type message...">
+      <button id="send-btn"><i class="fas fa-paper-plane"></i></button>
     </div>
   </div>
 

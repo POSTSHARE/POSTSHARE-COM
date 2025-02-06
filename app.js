@@ -1,6 +1,7 @@
 const chatBox = document.getElementById('chat-box');
 const userInput = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
+const conversationList = document.getElementById('conversation-list');
 
 // Function to add a message to the chat box
 function addMessage(message, isUser) {
@@ -23,25 +24,17 @@ function handleUserInput() {
     addMessage(userMessage, true);
     userInput.value = ''; // Clear input field
 
-    // Simulate bot response (replace this with an API call)
+    // Add user message to old conversations
+    const conversationItem = document.createElement('li');
+    conversationItem.textContent = userMessage;
+    conversationList.appendChild(conversationItem);
+
+    // Simulate bot response
     setTimeout(() => {
-      const botMessage = getBotResponse(userMessage);
+      const botMessage = "Sorry, I can’t generate messages right now. I’m still under development. Stay with me for future updates!";
       addMessage(botMessage, false);
     }, 500);
   }
-}
-
-// Function to generate bot responses
-function getBotResponse(userMessage) {
-  const responses = {
-    "hello": "Greetings, human! I'm NeuraFlow AI from 2050. How can I assist you?",
-    "how are you": "I'm functioning at optimal levels. How about you?",
-    "what is your name": "I'm NeuraFlow AI, your futuristic assistant.",
-    "default": "I'm sorry, I didn't understand that. Can you rephrase?"
-  };
-
-  const lowerCaseMessage = userMessage.toLowerCase();
-  return responses[lowerCaseMessage] || responses["default"];
 }
 
 // Event listeners

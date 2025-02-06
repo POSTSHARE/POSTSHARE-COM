@@ -1,59 +1,65 @@
 const chatBox = document.getElementById('chat-box');
 const userInput = document.getElementById('user-input');
-const thinkingIndicator = document.getElementById('thinking-indicator');
+const thinkingIndicator = document.getElementById('thinking');
+
+// Replace with your OpenAI API key
+const OPENAI_API_KEY = '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';
+const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions';
 
 async function sendMessage() {
     const message = userInput.value.trim();
-    if (message) {
-        addMessage(message, 'user');
-        userInput.value = '';
-        showThinkingIndicator();
-        
-        try {
-            const botMessage = await getBotResponse(message);
-            addMessage(botMessage, 'bot');
-        } catch (error) {
-            addMessage("Sorry, I couldn't process your request. Please try again.", 'bot');
-        } finally {
-            hideThinkingIndicator();
-        }
+    if (!message) return;
+
+    addMessage(message, 'user');
+    userInput.value = '';
+    showThinking();
+
+    try {
+        const response = await getAIResponse(message);
+        addMessage(response, 'bot');
+    } catch (error) {
+        console.error('Error:', error);
+        addMessage("Sorry, I couldn't process your request. Please try again.", 'bot');
+    } finally {
+        hideThinking();
     }
 }
 
-function addMessage(message, sender) {
-    const messageElement = document.createElement('div');
-    messageElement.classList.add('message', `${sender}-message`);
-    messageElement.innerHTML = message;
-    chatBox.appendChild(messageElement);
-    chatBox.scrollTop = chatBox.scrollHeight;
-}
-
-function showThinkingIndicator() {
-    thinkingIndicator.style.display = 'block';
-}
-
-function hideThinkingIndicator() {
-    thinkingIndicator.style.display = 'none';
-}
-
-async function getBotResponse(message) {
-    // Replace with your OpenAI API key
-    const apiKey = 'your-openai-api-key';
-    const apiUrl = 'https://api.openai.com/v1/chat/completions';
-
-    const response = await fetch(apiUrl, {
+async function getAIResponse(query) {
+    const response = await fetch(OPENAI_API_URL, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKey}`
+            'Authorization': `Bearer ${OPENAI_API_KEY}`
         },
         body: JSON.stringify({
-            model: "gpt-4",
-            messages: [{ role: "user", content: message }],
-            max_tokens: 150
+            model: 'gpt-4', // or 'gpt-3.5-turbo'
+            messages: [{ role: 'user', content: query }],
+            max_tokens: 500
         })
     });
 
     const data = await response.json();
     return data.choices[0].message.content;
 }
+
+function addMessage(content, sender) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${sender}-message`;
+    messageDiv.textContent = content;
+    chatBox.appendChild(messageDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function showThinking() {
+    thinkingIndicator.style.display = 'flex';
+}
+
+function hideThinking() {
+    thinkingIndicator.style.display = 'none';
+}
+
+// Enter key support
+userInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendMessage();
+});

@@ -11,24 +11,33 @@ document.getElementById('send-button').addEventListener('click', function() {
         // Clear input field
         document.getElementById('user-input').value = '';
 
-        // Call AI function to get response
+        // Call AI function to get response from the backend
         setTimeout(function() {
             getAIResponse(userInput);
         }, 500); // Adding a slight delay to simulate processing
     }
 });
 
-// Function to simulate AI response
-function getAIResponse(userInput) {
+// Function to get AI response from the backend
+async function getAIResponse(userInput) {
     const chatBox = document.getElementById('chat-box');
+    let botResponse = "Sorry, I couldn't understand that.";
 
-    let botResponse = "Sorry, I can't understand that.";
+    try {
+        // Send the user input to the backend (Node.js server)
+        const response = await fetch('http://localhost:3000/ask', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ query: userInput })
+        });
 
-    // Simple logic to handle some basic queries
-    if (userInput.toLowerCase().includes("hello")) {
-        botResponse = "Hello! How can I assist you today?";
-    } else if (userInput.toLowerCase().includes("how are you")) {
-        botResponse = "I'm doing great! How about you?";
+        const data = await response.json();
+        botResponse = data.answer; // Get AI's response
+
+    } catch (error) {
+        botResponse = "Something went wrong, please try again!";
     }
 
     // Display bot response

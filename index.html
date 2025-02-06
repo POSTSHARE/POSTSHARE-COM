@@ -1,13 +1,11 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeuraFlow AI</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>NeuraFlow AI Pro</title>
     <style>
-        /* === Base Styles === */
+        /* === Enhanced Base Styles === */
         * {
             margin: 0;
             padding: 0;
@@ -22,22 +20,22 @@
             overflow: hidden;
         }
 
-        /* === Sidebar (DeepSeek Style) === */
+        /* === Premium Sidebar === */
         .sidebar {
             position: fixed;
-            left: 0;
+            left: -280px;
             top: 0;
             height: 100%;
             width: 280px;
             background: #1e293b;
-            transform: translateX(-100%);
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 1000;
             border-right: 1px solid #334155;
+            box-shadow: 4px 0 15px rgba(0,0,0,0.2);
         }
 
         .sidebar.active {
-            transform: translateX(0);
+            transform: translateX(280px);
         }
 
         .sidebar-header {
@@ -49,52 +47,25 @@
         }
 
         .logo {
-            width: 40px;
-            height: 40px;
-            background: #3b82f6;
-            border-radius: 8px;
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #3b82f6, #6366f1);
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
+            font-weight: 600;
             color: white;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
         }
 
-        .sidebar h2 {
-            font-size: 1.25rem;
-            color: #f8fafc;
-        }
-
-        .conversation-list {
-            padding: 16px;
-            list-style: none;
-        }
-
-        .conversation-item {
-            padding: 12px;
-            margin-bottom: 8px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.2s;
-            color: #94a3b8;
-        }
-
-        .conversation-item:hover {
-            background: #334155;
-        }
-
-        /* === Main Container === */
+        /* === Enhanced Chat Interface === */
         .container {
             height: 100vh;
-            margin-left: 0;
-            transition: margin 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
         }
 
-        .container.sidebar-active {
-            margin-left: 280px;
-        }
-
-        /* === Header === */
         .header {
             padding: 20px;
             background: #1e293b;
@@ -104,171 +75,177 @@
             justify-content: space-between;
         }
 
-        .menu-button {
-            background: none;
-            border: none;
-            color: #94a3b8;
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 8px;
-            transition: background 0.2s;
-        }
-
-        .menu-button:hover {
-            background: #334155;
-        }
-
         .ceo-tag {
-            font-size: 0.875rem;
-            color: #64748b;
+            font-size: 0.9rem;
+            color: #818cf8;
+            background: rgba(99, 102, 241, 0.1);
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 1px solid #4f46e5;
         }
 
-        /* === Chat Area === */
         .chat-container {
-            height: calc(100vh - 140px);
-            display: flex;
-            flex-direction: column;
+            flex: 1;
             padding: 24px;
             overflow-y: auto;
+            background: linear-gradient(160deg, #0f172a 0%, #1e293b 100%);
         }
 
         .message {
             max-width: 75%;
-            margin-bottom: 16px;
-            padding: 12px 16px;
-            border-radius: 12px;
-            animation: messageAppear 0.3s ease-out;
+            margin: 16px 0;
+            padding: 16px 20px;
+            border-radius: 15px;
+            animation: messageAppear 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            line-height: 1.5;
             position: relative;
         }
 
         .user-message {
             background: #1e3a8a;
-            align-self: flex-end;
-            margin-right: 8px;
+            margin-left: auto;
+            box-shadow: 0 2px 8px rgba(30, 58, 138, 0.3);
         }
 
         .bot-message {
             background: #1e293b;
             border: 1px solid #334155;
-            align-self: flex-start;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
-        /* === Input Area === */
+        /* === Premium Input System === */
         .input-container {
             padding: 20px;
             background: #1e293b;
             border-top: 1px solid #334155;
+            position: relative;
         }
 
         .input-wrapper {
-            display: flex;
-            gap: 12px;
             max-width: 800px;
             margin: 0 auto;
+            display: flex;
+            gap: 12px;
+            align-items: center;
         }
 
         #user-input {
             flex: 1;
-            padding: 12px 16px;
+            padding: 14px 20px;
             border: 1px solid #334155;
-            border-radius: 8px;
+            border-radius: 12px;
             background: #0f172a;
             color: #f8fafc;
             font-size: 1rem;
-            transition: border-color 0.2s;
+            transition: all 0.3s ease;
         }
 
         #user-input:focus {
-            outline: none;
-            border-color: #3b82f6;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
         }
 
         #send-btn {
-            padding: 12px 20px;
-            background: #3b82f6;
+            padding: 14px 24px;
+            background: linear-gradient(135deg, #6366f1, #3b82f6);
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             color: white;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: transform 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         #send-btn:hover {
-            background: #2563eb;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
         }
 
         /* === Animations === */
         @keyframes messageAppear {
-            from {
+            0% {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(20px) scale(0.95);
             }
-            to {
+            100% {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0) scale(1);
             }
         }
 
-        /* === Mobile Responsive === */
+        /* === Mobile Excellence === */
         @media (max-width: 768px) {
             .sidebar {
-                width: 100%;
-                transform: translateX(-100%);
+                width: 85%;
+                left: -85%;
             }
 
-            .container.sidebar-active {
-                margin-left: 0;
+            .sidebar.active {
+                transform: translateX(85%);
             }
 
             .message {
-                max-width: 85%;
+                max-width: 90%;
+            }
+
+            .input-wrapper {
+                padding: 0 10px;
+            }
+
+            #send-btn {
+                padding: 14px;
+            }
+
+            .logo {
+                width: 40px;
+                height: 40px;
+                font-size: 0.9rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Sidebar -->
+    <!-- Premium Sidebar -->
     <nav class="sidebar">
         <div class="sidebar-header">
             <div class="logo">NF</div>
-            <h2>NeuraFlow Logs</h2>
+            <h2 style="color: #e0e7ff">Neura Logs</h2>
         </div>
-        <ul class="conversation-list" id="conversation-list">
-            <!-- Conversation history will be populated here -->
-        </ul>
+        <ul class="conversation-list" id="conversation-list"></ul>
     </nav>
 
-    <!-- Main Content -->
+    <!-- Main Interface -->
     <div class="container">
-        <!-- Header -->
         <header class="header">
-            <button class="menu-button" id="menu-button">
-                <i class="fas fa-bars"></i>
+            <button id="menu-button" style="background: none; border: none; color: #818cf8; font-size: 1.5rem;">
+                ☰
             </button>
-            <div class="ceo-tag">CEO: Sahlan Hasan</div>
+            <div class="ceo-tag">🚀 CEO: Sahlan Hasan</div>
         </header>
 
-        <!-- Chat Area -->
         <div class="chat-container" id="chat-box">
             <div class="message bot-message">
-                Neural systems initializing... Ready for cognitive input.
+                🤖 Neural Matrix Initializing... Ready for Cognitive Input
             </div>
         </div>
 
-        <!-- Input Area -->
         <div class="input-container">
             <div class="input-wrapper">
                 <input type="text" id="user-input" placeholder="Enter neural query...">
                 <button id="send-btn">
-                    <i class="fas fa-paper-plane"></i>
+                    <span>Send</span>
+                    <svg style="width: 18px; fill: white" viewBox="0 0 24 24">
+                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                    </svg>
                 </button>
             </div>
         </div>
     </div>
 
     <script>
-        // DOM Elements
+        // Enhanced Functionality
         const sidebar = document.querySelector('.sidebar');
         const menuButton = document.getElementById('menu-button');
         const chatBox = document.getElementById('chat-box');
@@ -276,43 +253,43 @@
         const sendBtn = document.getElementById('send-btn');
         const conversationList = document.getElementById('conversation-list');
 
-        // Toggle Sidebar
+        // Toggle Premium Sidebar
         menuButton.addEventListener('click', () => {
             sidebar.classList.toggle('active');
-            document.querySelector('.container').classList.toggle('sidebar-active');
         });
 
-        // Add Message Function
+        // Enhanced Message Handling
         function addMessage(text, isUser) {
             const message = document.createElement('div');
             message.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
-            message.textContent = text;
-            
+            message.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    ${isUser ? '👤' : '🤖'} 
+                    <span>${text}</span>
+                </div>
+            `;
             chatBox.appendChild(message);
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-        // Handle User Input
         function handleInput() {
             const text = userInput.value.trim();
             if (!text) return;
 
-            // Add to conversation history
+            // Add to history
             const historyItem = document.createElement('li');
-            historyItem.className = 'conversation-item';
             historyItem.textContent = text;
+            historyItem.style.padding = '12px';
+            historyItem.style.color = '#e0e7ff';
             conversationList.appendChild(historyItem);
 
-            // Add user message
+            // Add messages
             addMessage(text, true);
-
-            // System response
-            setTimeout(() => {
-                addMessage("Neural matrix processing... System upgrade in progress. Please wait for enhanced capabilities.", false);
-            }, 800);
-
-            // Clear input
             userInput.value = '';
+
+            setTimeout(() => {
+                addMessage("🧠 Neural Processors Calibrating... ⚙️ System Upgrade in Progress... 🚀 Stay Tuned!", false);
+            }, 800);
         }
 
         // Event Listeners
@@ -325,7 +302,6 @@
         document.addEventListener('click', (e) => {
             if (!sidebar.contains(e.target) && !menuButton.contains(e.target)) {
                 sidebar.classList.remove('active');
-                document.querySelector('.container').classList.remove('sidebar-active');
             }
         });
     </script>

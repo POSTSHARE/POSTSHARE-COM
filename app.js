@@ -1,96 +1,47 @@
-/* General Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+const chatBox = document.getElementById('chat-box');
+const userInput = document.getElementById('user-input');
+const sendBtn = document.getElementById('send-btn');
+
+// Function to add a message to the chat box
+function addMessage(message, isUser) {
+  const messageElement = document.createElement('div');
+  messageElement.classList.add('message');
+  messageElement.classList.add(isUser ? 'user-message' : 'bot-message');
+  messageElement.textContent = message;
+  chatBox.appendChild(messageElement);
+  chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to the latest message
 }
 
-body {
-  font-family: 'Arial', sans-serif;
-  background-color: #1a1a1a;
-  color: #ffffff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+// Function to handle user input
+function handleUserInput() {
+  const userMessage = userInput.value.trim();
+  if (userMessage) {
+    addMessage(userMessage, true);
+    userInput.value = ''; // Clear input field
+
+    // Simulate bot response (you can replace this with an API call)
+    setTimeout(() => {
+      const botMessage = getBotResponse(userMessage);
+      addMessage(botMessage, false);
+    }, 500);
+  }
 }
 
-.chat-container {
-  width: 400px;
-  background-color: #2a2a2a;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  overflow: hidden;
+// Function to generate bot responses
+function getBotResponse(userMessage) {
+  const responses = {
+    "hello": "Hi there! How can I assist you today?",
+    "how are you": "I'm just a bunch of code, but I'm functioning perfectly! How about you?",
+    "what is your name": "I'm NeuraFlow AI, your intelligent assistant.",
+    "default": "I'm sorry, I didn't understand that. Can you rephrase?"
+  };
+
+  const lowerCaseMessage = userMessage.toLowerCase();
+  return responses[lowerCaseMessage] || responses["default"];
 }
 
-.chat-header {
-  background-color: #333;
-  padding: 15px;
-  text-align: center;
-}
-
-.chat-header h1 {
-  font-size: 24px;
-  margin-bottom: 5px;
-}
-
-.chat-header p {
-  font-size: 14px;
-  color: #ccc;
-}
-
-.chat-box {
-  height: 300px;
-  padding: 15px;
-  overflow-y: auto;
-  border-bottom: 1px solid #444;
-}
-
-.chat-input {
-  display: flex;
-  padding: 10px;
-  background-color: #333;
-}
-
-.chat-input input {
-  flex: 1;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  background-color: #444;
-  color: #fff;
-  margin-right: 10px;
-}
-
-.chat-input button {
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  background-color: #007bff;
-  color: #fff;
-  cursor: pointer;
-}
-
-.chat-input button:hover {
-  background-color: #0056b3;
-}
-
-/* Chat Message Styling */
-.message {
-  margin-bottom: 10px;
-  padding: 10px;
-  border-radius: 5px;
-  max-width: 80%;
-}
-
-.user-message {
-  background-color: #007bff;
-  color: #fff;
-  align-self: flex-end;
-}
-
-.bot-message {
-  background-color: #444;
-  color: #fff;
-  align-self: flex-start;
-}
+// Event listeners
+sendBtn.addEventListener('click', handleUserInput);
+userInput.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') handleUserInput();
+});

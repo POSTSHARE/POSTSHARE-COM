@@ -34,9 +34,9 @@ function handleUserInput() {
 // Function to generate bot responses
 function getBotResponse(userMessage) {
   const responses = {
-    "hello": "Hi there! How can I assist you today?",
-    "how are you": "I'm just a bunch of code, but I'm functioning perfectly! How about you?",
-    "what is your name": "I'm NeuraFlow AI, your intelligent assistant.",
+    "hello": "Greetings, human! I'm NeuraFlow AI from 2050. How can I assist you?",
+    "how are you": "I'm functioning at optimal levels. How about you?",
+    "what is your name": "I'm NeuraFlow AI, your futuristic assistant.",
     "default": "I'm sorry, I didn't understand that. Can you rephrase?"
   };
 

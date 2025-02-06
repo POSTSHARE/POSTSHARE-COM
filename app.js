@@ -1,58 +1,51 @@
-// Function to handle the sending of user messages
-document.getElementById('send-button').addEventListener('click', function() {
-    const userInput = document.getElementById('user-input').value.trim();
-    if (userInput) {
-        // Display user message
-        const userMessageDiv = document.createElement('div');
-        userMessageDiv.classList.add('message', 'user-message');
-        userMessageDiv.textContent = userInput;
-        document.getElementById('chat-box').appendChild(userMessageDiv);
+const chatBox = document.getElementById('chat-box');
+const userInput = document.getElementById('user-input');
+const sendBtn = document.getElementById('send-btn');
 
-        // Clear input field
-        document.getElementById('user-input').value = '';
+// Function to add a message to the chat box
+function addMessage(message, isUser) {
+  const messageElement = document.createElement('div');
+  messageElement.classList.add('message');
+  messageElement.classList.add(isUser ? 'user-message' : 'bot-message');
 
-        // Call AI function to get response from the backend
-        setTimeout(function() {
-            getAIResponse(userInput);
-        }, 500); // Adding slight delay for realism
-    }
-});
+  const messageText = document.createElement('p');
+  messageText.textContent = message;
+  messageElement.appendChild(messageText);
 
-// Function to get AI response from the backend
-async function getAIResponse(userInput) {
-    const chatBox = document.getElementById('chat-box');
-    let botResponse = "Sorry, I couldn't understand that.";
-
-    try {
-        // Send the user input to the backend (Node.js server or similar)
-        const response = await fetch('http://localhost:3000/ask', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ query: userInput })
-        });
-
-        const data = await response.json();
-        botResponse = data.answer; // Get AI's response
-
-    } catch (error) {
-        botResponse = "Something went wrong, please try again!";
-    }
-
-    // Display bot response
-    const botResponseDiv = document.createElement('div');
-    botResponseDiv.classList.add('message', 'bot-message');
-    botResponseDiv.textContent = botResponse;
-    chatBox.appendChild(botResponseDiv);
-
-    // Scroll to the bottom of the chat box
-    chatBox.scrollTop = chatBox.scrollHeight;
+  chatBox.appendChild(messageElement);
+  chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to the latest message
 }
 
-// Optional: Add functionality to press Enter key to send message
-document.getElementById('user-input').addEventListener('keypress', function(event) {
-    if (event.key === 'Enter') {
-        document.getElementById('send-button').click();
-    }
+// Function to handle user input
+function handleUserInput() {
+  const userMessage = userInput.value.trim();
+  if (userMessage) {
+    addMessage(userMessage, true);
+    userInput.value = ''; // Clear input field
+
+    // Simulate bot response (replace this with an API call)
+    setTimeout(() => {
+      const botMessage = getBotResponse(userMessage);
+      addMessage(botMessage, false);
+    }, 500);
+  }
+}
+
+// Function to generate bot responses
+function getBotResponse(userMessage) {
+  const responses = {
+    "hello": "Hi there! How can I assist you today?",
+    "how are you": "I'm just a bunch of code, but I'm functioning perfectly! How about you?",
+    "what is your name": "I'm NeuraFlow AI, your intelligent assistant.",
+    "default": "I'm sorry, I didn't understand that. Can you rephrase?"
+  };
+
+  const lowerCaseMessage = userMessage.toLowerCase();
+  return responses[lowerCaseMessage] || responses["default"];
+}
+
+// Event listeners
+sendBtn.addEventListener('click', handleUserInput);
+userInput.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') handleUserInput();
 });

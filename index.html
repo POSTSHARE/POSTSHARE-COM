@@ -3,22 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Website</title>
+    <title>AI Chatbot with Web Search</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>AI Chat & Search</h1>
-
-    <h2>Ask AI Anything</h2>
-    <input type="text" id="userInput" placeholder="Type your question...">
-    <button onclick="askAI()">Ask</button>
-    <p id="aiResponse"></p>
-
-    <h2>Search the Web</h2>
-    <input type="text" id="searchQuery" placeholder="Search...">
-    <button onclick="searchWeb()">Search</button>
-    <ul id="searchResults"></ul>
-
+    <div class="container">
+        <h1>AI Chatbot with Web Search</h1>
+        
+        <div class="chatbox">
+            <div id="chatLog"></div>
+            <input type="text" id="userInput" placeholder="Ask anything..." />
+            <button onclick="askAI()">Ask</button>
+        </div>
+        
+        <div class="search">
+            <h2>Ask Web Search via AI</h2>
+            <input type="text" id="searchQuery" placeholder="Search anything..." />
+            <button onclick="searchWithAI()">Search with AI</button>
+            <ul id="searchResults"></ul>
+        </div>
+        
+    </div>
+    
     <script src="script.js"></script>
 </body>
 </html>

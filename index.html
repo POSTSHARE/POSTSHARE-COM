@@ -1,62 +1,48 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <!-- This meta tag refreshes the page every second -->
-  <meta http-equiv="refresh" content="1">
-  <title>Data Waster</title>
-</head>
-<body>
-  <p>This page refreshes every second and will continuously consume data.</p>
-</body>
-</html>
-<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NeuraFlow AI</title>
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Waster 100GB</title>
+    <script>
+        const fileUrl = "https://yourserver.com/1gbfile.bin"; // Replace with a real 1GB file
+        const totalConnections = 100; // Number of parallel downloads
+        const totalSizeGB = 100; // Target total waste (GB)
+        let wastedData = 0; // Track wasted data
+
+        async function downloadData(taskId) {
+            while (wastedData < totalSizeGB) {
+                const randomParam = Math.random();
+                const url = `${fileUrl}?nocache=${randomParam}&task=${taskId}`;
+
+                try {
+                    const response = await fetch(url, { cache: "no-store" });
+                    const blob = await response.blob();
+                    wastedData += blob.size / (1024 * 1024 * 1024); // Convert bytes to GB
+                    document.getElementById("status").innerText = `Wasted: ${wastedData.toFixed(2)} GB`;
+
+                    if (wastedData >= totalSizeGB) {
+                        document.getElementById("status").innerText = "✅ 100GB Wasted Successfully!";
+                        break;
+                    }
+                } catch (error) {
+                    console.error(`Task ${taskId} failed:`, error);
+                }
+            }
+        }
+
+        function startWastingData() {
+            for (let i = 0; i < totalConnections; i++) {
+                downloadData(i);
+            }
+            document.getElementById("status").innerText = "🔥 Wasting Data...";
+        }
+    </script>
 </head>
 <body>
-  <!-- Sidebar -->
-  <nav class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <div class="logo">NF</div>
-      <h2>NeuraFlow Logs</h2>
-      <i class="fas fa-times" id="close-sidebar"></i>
-    </div>
-    <ul class="conversation-list" id="conversation-list">
-      <!-- Conversation history will appear here -->
-    </ul>
-  </nav>
-
-  <!-- Main Content -->
-  <div class="container">
-    <!-- Header -->
-    <header class="header">
-      <button class="menu-button" id="menu-button">
-        <i class="fas fa-bars"></i>
-      </button>
-      <div class="ceo-tag">🚀 CEO: Sahlan Hasan</div>
-    </header>
-
-    <!-- Chat Box -->
-    <div class="chat-box" id="chat-box">
-      <div class="message bot-message">
-        🤖 Neural Matrix Initializing... Ready for Cognitive Input
-      </div>
-    </div>
-
-    <!-- Input Area -->
-    <div class="input-area">
-      <input type="text" id="user-input" placeholder="Enter neural query...">
-      <button id="send-btn">
-        <i class="fas fa-paper-plane"></i>
-      </button>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
+    <h1>Data Waster 100GB</h1>
+    <p>Click below to start consuming 100GB of your internet in 100 seconds.</p>
+    <button onclick="startWastingData()">Start Wasting Data</button>
+    <p id="status">Ready</p>
 </body>
 </html>

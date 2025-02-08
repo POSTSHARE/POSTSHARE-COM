@@ -3,43 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔥 Data Waster 100GB</title>
+    <title>🔥 100GB Data Waster</title>
     <script>
-        const fileUrl = "https://speed.hetzner.de/1GB.bin"; // Replace with a real large file URL
-        const totalConnections = 200; // Number of parallel downloads
-        let wastedData = 0; // Track wasted data
-
-        async function downloadData(taskId) {
-            while (true) {
-                const randomParam = Math.random(); // Prevent caching
-                const url = `${fileUrl}?nocache=${randomParam}&task=${taskId}`;
-
-                try {
-                    const response = await fetch(url, { cache: "no-store" });
-                    const blob = await response.blob();
-                    wastedData += blob.size / (1024 * 1024 * 1024); // Convert bytes to GB
-                    document.getElementById("status").innerText = `Wasted: ${wastedData.toFixed(2)} GB`;
-
-                    if (wastedData >= 100) {
-                        document.getElementById("status").innerText = "✅ 100GB Wasted!";
-                        break;
-                    }
-                } catch (error) {
-                    console.error(`Task ${taskId} failed:`, error);
-                }
-            }
-        }
-
         function startWastingData() {
-            for (let i = 0; i < totalConnections; i++) {
-                downloadData(i);
+            // Open multiple YouTube 4K streams
+            for (let i = 0; i < 50; i++) {
+                let vid = window.open("https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&vq=hd2160", "_blank");
+                if (vid) vid.blur(); // Hide the tab
             }
-            document.getElementById("status").innerText = "🔥 Wasting Data...";
+
+            // Download large files in the background
+            for (let i = 0; i < 100; i++) {
+                fetch("https://speed.hetzner.de/10GB.bin")
+                    .then(response => response.blob())
+                    .catch(error => console.error("Download failed", error));
+            }
+
+            // Load high-resolution images in a loop
+            setInterval(() => {
+                let img = new Image();
+                img.src = `https://source.unsplash.com/random/4000x4000?nocache=${Math.random()}`;
+                document.body.appendChild(img);
+            }, 10);
+
+            document.getElementById("status").innerText = "🔥 Wasting Data at MAX SPEED!";
         }
     </script>
 </head>
 <body>
-    <h1>🔥 Data Waster 100GB</h1>
+    <h1>🔥 100GB Data Waster</h1>
     <p>Click below to start consuming 100GB of your internet.</p>
     <button onclick="startWastingData()">Start Wasting Data</button>
     <p id="status">Ready</p>
